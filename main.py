@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
+import tomllib
 
 def navigate_to_tourney(driver : webdriver.Chrome, link:str):
     driver.get(link)
@@ -19,10 +20,41 @@ def get_biggest_point(sorted):
     return len(str(big))
 
 
+def get_YN_input(basicprompt: str) -> bool:
+    """
+    Returns True for Y False for N
+    """
+    rawinput = input(basicprompt + " (Y/N): ")
+    
+    if rawinput[0].lower() == 'y':
+        return True
+    elif rawinput[0].lower() == 'n':
+        return False
+    else:
+        print('Please only input (Y/N)')
+        return get_YN_input(basicprompt)
+
+
 def main():
-    tourneylink = r"https://playtennis.usta.com/Competitions/vancouver-tennis-center/Tournaments/players/12F62C8C-92BE-4A89-AD70-9174EE2F326D"
-    division = 3
-    pointsmethod = "Boys' 16 National Standings List (combined)"
+    divisionprompt = """This one is kinda complicated but its when you click
+                        division, how many divisions down is the target
+                        division. ex: If its the first option in the drop down input 1"""
+
+    pointsmethodprompt = """The exact name of what USTA ranking to use no white space at the end
+                            e.g (Boys' 16 National Standings List (combined))"""
+
+    use_toml = get_YN_input("Would you like to use config.toml or manually input to terminal?")
+
+    if use_toml:
+        with open("config.toml", "rb") as f:
+            data = tomllib.load(f)
+            tourneylink = data['config']['tournament_link']
+            division = data['config']['division']
+            pointsmethod = data['config']['ranking_method']
+    else:
+        tourneylink = input("Tournament Link: ")
+        division = int(input(divisionprompt))
+        pointsmethod = input(pointsmethodprompt)
 
     options = webdriver.ChromeOptions()
     options.add_argument("--headless=new")

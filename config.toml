@@ -1,0 +1,13 @@
+# This is the config
+
+[config]
+tournament_link = "https://playtennis.usta.com/Competitions/vancouver-tennis-center/Tournaments/players/12F62C8C-92BE-4A89-AD70-9174EE2F326D"
+
+# This one is kinda complicated but its when you click division, how many divisions down is the target
+# division. If its the first option in the drop down make it 1
+division = 3
+
+# The exact name of what USTA ranking to use no white space at the end
+# e.g (Boys' 16 National Standings List (combined))
+# use double quotes so the apostrophe is not an issue
+ranking_method = "Boys' 16 National Standings List (combined)"
